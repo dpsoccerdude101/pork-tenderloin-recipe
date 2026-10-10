@@ -57,6 +57,7 @@ h2{
 
 /* batch toggle */
 .batch{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.batch + .batch{margin-top:.5rem}
 .batch button{
   font:inherit;font-size:.85rem;line-height:1.25;
   padding:.7rem .6rem;min-height:56px;
@@ -172,25 +173,33 @@ footer p{margin:.35rem 0}
 <div class="wrap">
 
 <header>
-  <p class="eyebrow">Oven 380&deg;F &middot; Sear then foil pouch</p>
+  <p class="eyebrow">Oven <span id="ebtemp">380&deg;F</span> &middot; Sear then foil pouch</p>
   <h1>Baked Garlic Pork Tenderloin</h1>
   <p class="sub">The sweetcsdesigns recipe, stripped of ads, scaled for two tenderloins.</p>
   <ul class="chips">
-    <li><b>380&deg;F</b> oven</li>
+    <li><b id="chiptemp">380&deg;F</b> oven</li>
     <li><b>145&deg;F</b> internal</li>
-    <li><b>20 to 25 min</b> bake</li>
+    <li><b id="chiptime">20 to 25 min</b> bake</li>
     <li><b>5 min</b> rest</li>
   </ul>
 </header>
 
 <section>
-  <h2>1. Pick your batch</h2>
+  <h2>1. Your setup</h2>
   <div class="batch">
     <button type="button" id="b1" aria-pressed="true" data-batch="a">
       <b><span class="tick" aria-hidden="true">&#10003;</span>2 lb</b>Two standard ~1 lb tenderloins
     </button>
     <button type="button" id="b2" aria-pressed="false" data-batch="b">
       <b><span class="tick" aria-hidden="true">&#10003;</span>3 lb</b>Two big 1.5 lb tenderloins
+    </button>
+  </div>
+  <div class="batch">
+    <button type="button" id="m1" aria-pressed="true" data-mode="c">
+      <b><span class="tick" aria-hidden="true">&#10003;</span>Conventional</b>No fan, 380&deg;F
+    </button>
+    <button type="button" id="m2" aria-pressed="false" data-mode="v">
+      <b><span class="tick" aria-hidden="true">&#10003;</span>Convection</b>Fan on, 355&deg;F
     </button>
   </div>
 </section>
@@ -217,12 +226,12 @@ footer p{margin:.35rem 0}
   <h2>3. Method</h2>
   <ol class="steps">
     <li>Optional: bag the pork with the Italian dressing and marinate 12 to 24 hours.</li>
-    <li>Heat the oven to 380&deg;F and line a sheet pan with foil.</li>
+    <li>Heat the oven to <b id="steptemp">380&deg;F</b> and line a sheet pan with foil.</li>
     <li>Small bowl: stir the garlic and the dried herbs together. Set aside.</li>
     <li>Salt and pepper the meat generously.</li>
     <li>Heat the oil in a large pan until it shimmers. Sear the pork on all sides until dark golden brown. <span class="warn">Two tenderloins need a big skillet or two batches.</span> Crowded meat steams instead of crusting.</li>
     <li>Move to the foil. Coat heavily with the herb mix, lay the butter pats over the top, wrap into a pouch.</li>
-    <li>Bake to <b>145&deg;F</b> at the widest part. The original says about 30 min for 2 lb, but two separate 1 lb pieces in one pouch run 20 to 25. Start probing at 18.</li>
+    <li>Bake to <b>145&deg;F</b> at the widest part. The original says about 30 min for 2 lb, but two separate 1 lb pieces in one pouch run <span id="steptime">20 to 25 min</span>. Start probing at <span id="probeat">18</span> min.</li>
     <li>Rest tented with foil for 5 minutes. Slice against the grain and serve.</li>
   </ol>
 </section>
@@ -242,6 +251,7 @@ footer p{margin:.35rem 0}
 <section>
   <h2>5. Notes worth reading</h2>
   <ul class="notes">
+    <li class="hot" id="convnote" hidden><b>Convection.</b> Fan on means drop the dial 25&deg;F and start checking about 25% earlier, so 355&deg;F and probe at 13 min. Two cooks here: the fan speeds heat into the pouch, but it never touches the meat because the foil shields it. That means no extra browning and no drying out, which is the usual convection complaint. Keep the pouch clear of the back wall so it cannot sit over the fan inlet.</li>
     <li class="hot">Go by temperature, not time. Pink in the middle is fine the moment the thermometer reads <b>145&deg;F</b>.</li>
     <li>The recipe's <b>1 tbsp of salt</b> for 2 lb is roughly double what you would normally use. Season to taste instead of dumping it in.</li>
     <li>Sear the two pieces in batches if your pan is tight. The crust is the whole point of that step.</li>
@@ -321,6 +331,39 @@ footer p{margin:.35rem 0}
   var jumpBar = document.getElementById('bar');
   var jumpBtn = document.getElementById('jumpbtn');
 
+  var MODE = {
+    c: { temp: "380\u00B0F", time: "20 to 25 min", probe: 18, warn: 1080, now: 1320, conv: false },
+    v: { temp: "355\u00B0F", time: "17 to 22 min", probe: 13, warn: 780, now: 1020, conv: true }
+  };
+  var mode = "c";
+  var m1 = document.getElementById('m1');
+  var m2 = document.getElementById('m2');
+  var convNote = document.getElementById('convnote');
+
+  function idleText(){
+    return "Start it the moment the pork goes in the oven. Probe at " + MODE[mode].probe + " min.";
+  }
+  function setMode(which){
+    mode = which;
+    var M = MODE[which];
+    m1.setAttribute('aria-pressed', String(which === 'c'));
+    m2.setAttribute('aria-pressed', String(which === 'v'));
+    document.getElementById('ebtemp').innerHTML = M.temp;
+    document.getElementById('chiptemp').innerHTML = M.temp;
+    document.getElementById('chiptime').innerHTML = M.time;
+    document.getElementById('steptemp').innerHTML = M.temp;
+    document.getElementById('steptime').textContent = M.time;
+    document.getElementById('probeat').textContent = String(M.probe);
+    convNote.hidden = !M.conv;
+    if (!tick) {
+      box.classList.remove('warn', 'now');
+      clock.textContent = "00:00";
+      state.textContent = idleText();
+    }
+  }
+  m1.addEventListener('click', function(){ setMode('c'); });
+  m2.addEventListener('click', function(){ setMode('v'); });
+
   function fmt(s){
     var m = Math.floor(s / 60), r = s % 60;
     return (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r;
@@ -340,17 +383,18 @@ footer p{margin:.35rem 0}
     if (navigator.vibrate) { navigator.vibrate(400); }
   }
   function render(){
+    var M = MODE[mode];
     var s = Math.floor((Date.now() - t0) / 1000);
     clock.textContent = fmt(s);
     box.classList.remove('warn', 'now');
-    if (s < 1080) {
-      state.textContent = "Baking. Start probing at 18 min.";
-    } else if (s < 1320) {
+    if (s < M.warn) {
+      state.textContent = "Baking. Start probing at " + M.probe + " min.";
+    } else if (s < M.now) {
       box.classList.add('warn');
-      state.textContent = "18 min gone. Probe the thickest part now, target 145\u00B0F.";
+      state.textContent = M.probe + " min gone. Probe the thickest part now, target 145\u00B0F.";
     } else {
       box.classList.add('now');
-      state.textContent = "22 min gone. At temp or past it, pull it out and rest 5 min.";
+      state.textContent = (M.now / 60) + " min gone. At temp or past it, pull it out and rest 5 min.";
     }
   }
   startBtn.addEventListener('click', function(){
@@ -361,7 +405,8 @@ footer p{margin:.35rem 0}
     render();
     tick = setInterval(function(){
       var s = Math.floor((Date.now() - t0) / 1000);
-      if (s === 1080 || s === 1320) { ring(); }
+      var M = MODE[mode];
+      if (s === M.warn || s === M.now) { ring(); }
       render();
     }, 1000);
   });
@@ -370,13 +415,15 @@ footer p{margin:.35rem 0}
     t0 = null;
     clock.textContent = "00:00";
     box.classList.remove('warn', 'now');
-    state.textContent = "Start it the moment the pork goes in the oven.";
+    state.textContent = idleText();
     startBtn.textContent = "Start";
     jumpBar.classList.remove('started');
   });
   jumpBtn.addEventListener('click', function(){
     document.getElementById('timerbox').scrollIntoView({ behavior: "smooth", block: "center" });
   });
+
+  setMode('c');
 })();
 </script>
 </body>
