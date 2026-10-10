@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baked Garlic Pork Tenderloin</title>
+<meta name="description" content="Baked garlic pork tenderloin, ad-free, scaled for two tenderloins.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23a8442a'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23fff4e6' font-family='Georgia,serif'%3Ep%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#fdf8f1;
+  --card:#fffdfa;
+  --ink:#241c17;
+  --ink-soft:#6b5c51;
+  --line:#e4d7c8;
+  --accent:#a8442a;
+  --accent-ink:#7d2f1a;
+  --flag:#b8860b;
+  --flag-bg:#fdf2d6;
+  --ok:#3f6b3f;
+  --col:34rem;
+  --pad:1.15rem;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font:400 17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  padding-bottom:calc(132px + env(safe-area-inset-bottom));
+}
+.wrap{max-width:var(--col);margin:0 auto;padding:0 var(--pad)}
+header{padding:1.6rem 0 1.1rem}
+.eyebrow{
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent-ink);font-weight:700;margin:0 0 .5rem
+}
+h1{
+  font:700 1.62rem/1.15 Georgia,"Times New Roman",serif;
+  margin:0 0 .6rem;letter-spacing:-.01em
+}
+.sub{margin:0;color:var(--ink-soft);font-size:.95rem}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin:.9rem 0 0;padding:0;list-style:none}
+.chips li{text-align:center}
+.chips li{
+  border:1px solid var(--line);background:var(--card);
+  padding:.3rem .55rem;border-radius:2px;font-size:.78rem;color:var(--ink-soft)
+}
+.chips b{color:var(--ink)}
+
+section{margin:1.7rem 0 0}
+h2{
+  font:700 .78rem/1 sans-serif;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--accent-ink);margin:0 0 .8rem;padding-bottom:.45rem;border-bottom:1px solid var(--line)
+}
+
+/* batch toggle */
+.batch{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.batch button{
+  font:inherit;font-size:.85rem;line-height:1.25;
+  padding:.7rem .6rem;min-height:56px;
+  background:var(--card);color:var(--ink-soft);
+  border:2px solid var(--line);border-radius:2px;cursor:pointer;text-align:left
+}
+.batch button b{display:block;color:var(--ink);font-size:.95rem}
+.batch button .tick{display:none;margin-right:.3rem}
+.batch button[aria-pressed="true"] .tick{display:inline}
+.batch button[aria-pressed="true"]{
+  border-color:var(--accent);background:#fbeee8;color:var(--accent-ink)
+}
+.batch button[aria-pressed="true"] b{color:var(--accent-ink)}
+
+/* ingredients */
+ul.ing{list-style:none;margin:0;padding:0}
+label.pick{
+  display:flex;gap:.7rem;align-items:flex-start;
+  padding:.65rem .1rem;min-height:46px;
+  border-bottom:1px solid var(--line);cursor:pointer
+}
+label.pick:last-of-type{border-bottom:0}
+label.pick input{
+  appearance:none;-webkit-appearance:none;flex:0 0 auto;
+  width:24px;height:24px;margin:.12rem 0 0;
+  border:2px solid #c4b0a0;border-radius:2px;background:var(--card);cursor:pointer
+}
+label.pick input:checked{background:var(--accent);border-color:var(--accent)}
+label.pick input:checked::after{
+  content:"";display:block;width:5px;height:10px;
+  margin:2px auto 0;border:solid #fff4e6;border-width:0 2px 2px 0;transform:rotate(45deg)
+}
+label.pick .txt{flex:1}
+label.pick .qty{font-weight:700;color:var(--accent-ink)}
+label.pick small{display:block;color:var(--ink-soft);font-size:.85rem}
+label.pick.done .txt{opacity:.42;text-decoration:line-through}
+.progress{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.8rem;color:var(--ink-soft);margin:.7rem 0 0
+}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:.4rem}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+
+/* steps */
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{
+  counter-increment:s;position:relative;
+  padding:.85rem 0 .85rem 2.5rem;border-bottom:1px solid var(--line)
+}
+ol.steps li:last-child{border-bottom:0}
+ol.steps li::before{
+  content:counter(s);position:absolute;left:0;top:.85rem;
+  width:1.6rem;height:1.6rem;line-height:1.6rem;text-align:center;
+  background:var(--accent);color:#fff4e6;border-radius:2px;
+  font:700 .82rem/1.6 sans-serif
+}
+ol.steps .warn{color:var(--flag);font-weight:600}
+
+/* notes */
+.notes{margin:0;padding:0;list-style:none}
+.notes li{
+  padding:.6rem .75rem;margin:0 0 .5rem;
+  background:var(--card);border-left:3px solid var(--line);border-radius:2px;font-size:.94rem
+}
+.notes li.hot{border-left-color:var(--flag);background:var(--flag-bg)}
+.notes b{color:var(--accent-ink)}
+
+/* timer */
+.timer{
+  margin:0;padding:1rem;background:var(--card);border:1px solid var(--line);border-radius:2px
+}
+.clock{
+  font:700 2.4rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.02em;color:var(--ink)
+}
+.state{font-size:.88rem;color:var(--ink-soft);min-height:1.4em;margin:.35rem 0 0}
+.timer.warn .clock,.timer.warn .state{color:var(--flag)}
+.timer.now .clock,.timer.now .state{color:var(--accent)}
+.trow{display:flex;gap:.5rem;margin-top:.8rem}
+.trow button{
+  font:inherit;font-weight:700;font-size:.9rem;
+  padding:.75rem 1rem;min-height:48px;border-radius:2px;cursor:pointer;
+  border:1px solid var(--accent);background:var(--accent);color:#fff4e6
+}
+.trow button.ghost{background:var(--card);color:var(--accent-ink)}
+
+footer{
+  margin:2rem 0 0;padding:1.1rem 0 0;border-top:1px solid var(--line);
+  font-size:.86rem;color:var(--ink-soft)
+}
+footer a{color:var(--accent-ink);overflow-wrap:anywhere}
+footer p{margin:.35rem 0}
+
+/* fixed bar */
+.jump{
+  position:fixed;left:0;right:0;
+  bottom:calc(16px + env(safe-area-inset-bottom));
+  padding:0 var(--pad);pointer-events:none
+}
+.jump .inner{max-width:var(--col);margin:0 auto;pointer-events:auto}
+.jump .btn{
+  display:block;width:100%;min-height:52px;
+  font:inherit;font-weight:700;font-size:1rem;
+  background:var(--accent);color:#fff4e6;
+  border:1px solid var(--accent);border-radius:2px;cursor:pointer;
+  box-shadow:0 6px 18px rgba(60,30,15,.18)
+}
+.jump.started .btn{background:var(--card);color:var(--accent-ink)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Oven 380&deg;F &middot; Sear then foil pouch</p>
+  <h1>Baked Garlic Pork Tenderloin</h1>
+  <p class="sub">The sweetcsdesigns recipe, stripped of ads, scaled for two tenderloins.</p>
+  <ul class="chips">
+    <li><b>380&deg;F</b> oven</li>
+    <li><b>145&deg;F</b> internal</li>
+    <li><b>20 to 25 min</b> bake</li>
+    <li><b>5 min</b> rest</li>
+  </ul>
+</header>
+
+<section>
+  <h2>1. Pick your batch</h2>
+  <div class="batch">
+    <button type="button" id="b1" aria-pressed="true" data-batch="a">
+      <b><span class="tick" aria-hidden="true">&#10003;</span>2 lb</b>Two standard ~1 lb tenderloins
+    </button>
+    <button type="button" id="b2" aria-pressed="false" data-batch="b">
+      <b><span class="tick" aria-hidden="true">&#10003;</span>3 lb</b>Two big 1.5 lb tenderloins
+    </button>
+  </div>
+</section>
+
+<section>
+  <h2>2. Ingredients</h2>
+  <ul class="ing" id="ing">
+    <li><label class="pick"><input type="checkbox" data-k="i1"><span class="txt"><span class="qty" data-a="1 bottle, any size" data-b="1 bottle, any size">1 bottle, any size</span> Italian dressing<small>Optional overnight marinade. Skip it and the recipe still works.</small></span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i2"><span class="txt"><span class="qty" data-a="2 tbsp" data-b="3 tbsp">2 tbsp</span> extra virgin olive oil</span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i3"><span class="txt"><span class="qty" data-a="1 tbsp" data-b="1.5 tbsp">1 tbsp</span> sea salt<small>Heavy hand. See the notes.</small></span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i4"><span class="txt"><span class="qty" data-a="&frac12; tsp" data-b="&frac34; tsp">&frac12; tsp</span> fresh cracked pepper</span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i5"><span class="txt"><span class="qty" data-a="2 lb" data-b="3 lb">2 lb</span> pork tenderloin<small>Not pork loin.</small></span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i6"><span class="txt"><span class="qty" data-a="4 tbsp, in 4 to 6 pats" data-b="6 tbsp, in 6 to 9 pats">4 tbsp, in 4 to 6 pats</span> butter</span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i7"><span class="txt"><span class="qty" data-a="2 tbsp" data-b="3 tbsp">2 tbsp</span> diced garlic</span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i8"><span class="txt"><span class="qty" data-a="1 tsp each" data-b="1.5 tsp each">1 tsp each</span> dried basil, oregano, thyme, parsley</span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i9"><span class="txt"><span class="qty" data-a="&frac12; tsp" data-b="&frac34; tsp">&frac12; tsp</span> dried sage</span></label></li>
+    <li><label class="pick"><input type="checkbox" data-k="i10"><span class="txt"><span class="qty" data-a="OR 2 tbsp" data-b="OR 3 tbsp">OR 2 tbsp</span> Italian herb blend<small>Replaces all five dried herbs above.</small></span></label></li>
+  </ul>
+  <div class="progress"><span id="count">0 of 10 gathered</span><span id="yield">Serves 6</span></div>
+  <div class="bar"><i id="barfill"></i></div>
+</section>
+
+<section>
+  <h2>3. Method</h2>
+  <ol class="steps">
+    <li>Optional: bag the pork with the Italian dressing and marinate 12 to 24 hours.</li>
+    <li>Heat the oven to 380&deg;F and line a sheet pan with foil.</li>
+    <li>Small bowl: stir the garlic and the dried herbs together. Set aside.</li>
+    <li>Salt and pepper the meat generously.</li>
+    <li>Heat the oil in a large pan until it shimmers. Sear the pork on all sides until dark golden brown. <span class="warn">Two tenderloins need a big skillet or two batches.</span> Crowded meat steams instead of crusting.</li>
+    <li>Move to the foil. Coat heavily with the herb mix, lay the butter pats over the top, wrap into a pouch.</li>
+    <li>Bake to <b>145&deg;F</b> at the widest part. The original says about 30 min for 2 lb, but two separate 1 lb pieces in one pouch run 20 to 25. Start probing at 18.</li>
+    <li>Rest tented with foil for 5 minutes. Slice against the grain and serve.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>4. Bake timer</h2>
+  <div class="timer" id="timerbox">
+    <div class="clock" id="clock">00:00</div>
+    <p class="state" id="state">Start it the moment the pork goes in the oven.</p>
+    <div class="trow">
+      <button type="button" id="tstart">Start</button>
+      <button type="button" class="ghost" id="treset">Reset</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>5. Notes worth reading</h2>
+  <ul class="notes">
+    <li class="hot">Go by temperature, not time. Pink in the middle is fine the moment the thermometer reads <b>145&deg;F</b>.</li>
+    <li>The recipe's <b>1 tbsp of salt</b> for 2 lb is roughly double what you would normally use. Season to taste instead of dumping it in.</li>
+    <li>Sear the two pieces in batches if your pan is tight. The crust is the whole point of that step.</li>
+    <li>Leftovers reheat at 350&deg;F in a foil pouch, or sliced in butter in a hot pan.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Source, and it is ad-heavy:</p>
+  <p><a href="https://sweetcsdesigns.com/best-baked-garlic-pork-tenderloin/">sweetcsdesigns.com/best-baked-garlic-pork-tenderloin</a></p>
+  <p>Recipe pulled from the Sept 5, 2026 Wayback copy because the live page blocks scrapers.</p>
+</footer>
+
+</div>
+
+<div class="jump" id="bar">
+  <div class="inner">
+    <button type="button" class="btn" id="jumpbtn">Jump to the bake timer</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var LS_KEY = "pork-tenderloin-gathered-v1";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#ing input[type=checkbox]'));
+  var countEl = document.getElementById('count');
+  var barFill = document.getElementById('barfill');
+  var yieldEl = document.getElementById('yield');
+
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}") || {}; } catch (e) { saved = {}; }
+
+  function paint(){
+    var n = 0;
+    boxes.forEach(function(b){
+      var row = b.closest('label');
+      if (b.checked) { row.classList.add('done'); n++; }
+      else { row.classList.remove('done'); }
+    });
+    countEl.textContent = n + " of " + boxes.length + " gathered";
+    barFill.style.width = Math.round((n / boxes.length) * 100) + "%";
+  }
+
+  boxes.forEach(function(b){
+    if (saved[b.getAttribute('data-k')]) { b.checked = true; }
+    b.addEventListener('change', function(){
+      saved[b.getAttribute('data-k')] = b.checked;
+      try { localStorage.setItem(LS_KEY, JSON.stringify(saved)); } catch (e) {}
+      paint();
+    });
+  });
+  paint();
+
+  // batch toggle
+  var qtyEls = Array.prototype.slice.call(document.querySelectorAll('.qty'));
+  var b1 = document.getElementById('b1');
+  var b2 = document.getElementById('b2');
+
+  function setBatch(which){
+    b1.setAttribute('aria-pressed', String(which === 'a'));
+    b2.setAttribute('aria-pressed', String(which === 'b'));
+    qtyEls.forEach(function(el){
+      var v = el.getAttribute('data-' + which);
+      if (v) { el.innerHTML = v; }
+    });
+    yieldEl.textContent = (which === 'a') ? "Serves 6" : "Serves 9";
+  }
+  b1.addEventListener('click', function(){ setBatch('a'); });
+  b2.addEventListener('click', function(){ setBatch('b'); });
+
+  // timer
+  var t0 = null, tick = null;
+  var clock = document.getElementById('clock');
+  var state = document.getElementById('state');
+  var box = document.getElementById('timerbox');
+  var startBtn = document.getElementById('tstart');
+  var jumpBar = document.getElementById('bar');
+  var jumpBtn = document.getElementById('jumpbtn');
+
+  function fmt(s){
+    var m = Math.floor(s / 60), r = s % 60;
+    return (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r;
+  }
+  function ring(){
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) { return; }
+      var ctx = new Ctx();
+      var osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = "sine"; osc.frequency.value = 660;
+      gain.gain.value = 0.08;
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start();
+      setTimeout(function(){ osc.stop(); ctx.close(); }, 420);
+    } catch (e) {}
+    if (navigator.vibrate) { navigator.vibrate(400); }
+  }
+  function render(){
+    var s = Math.floor((Date.now() - t0) / 1000);
+    clock.textContent = fmt(s);
+    box.classList.remove('warn', 'now');
+    if (s < 1080) {
+      state.textContent = "Baking. Start probing at 18 min.";
+    } else if (s < 1320) {
+      box.classList.add('warn');
+      state.textContent = "18 min gone. Probe the thickest part now, target 145\u00B0F.";
+    } else {
+      box.classList.add('now');
+      state.textContent = "22 min gone. At temp or past it, pull it out and rest 5 min.";
+    }
+  }
+  startBtn.addEventListener('click', function(){
+    if (tick) { return; }
+    t0 = Date.now();
+    jumpBar.classList.add('started');
+    startBtn.textContent = "Running";
+    render();
+    tick = setInterval(function(){
+      var s = Math.floor((Date.now() - t0) / 1000);
+      if (s === 1080 || s === 1320) { ring(); }
+      render();
+    }, 1000);
+  });
+  document.getElementById('treset').addEventListener('click', function(){
+    if (tick) { clearInterval(tick); tick = null; }
+    t0 = null;
+    clock.textContent = "00:00";
+    box.classList.remove('warn', 'now');
+    state.textContent = "Start it the moment the pork goes in the oven.";
+    startBtn.textContent = "Start";
+    jumpBar.classList.remove('started');
+  });
+  jumpBtn.addEventListener('click', function(){
+    document.getElementById('timerbox').scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+})();
+</script>
+</body>
+</html>
